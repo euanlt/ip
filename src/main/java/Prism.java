@@ -1,10 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Prism {
     public static void main(String[] args) {
-        Task[] list = new Task[100];
-        int index = 0;
+        List<Task> list = new ArrayList<>();
         int taskNum;
         String banner =
                 "____________________________________________________________\n"
@@ -26,46 +27,59 @@ public class Prism {
             try {
                 if (Objects.equals(input, "list")) {
                     System.out.println("Here are the tasks in your list:\n");
-                    for (int i = 0; i < index; i++) {
-                        System.out.println((i + 1) + "." + list[i].toString());
+                    for (int i = 0; i < list.size(); i++) {
+                        System.out.println((i + 1) + "." + list.get(i).toString());
                     }
 
                 } else if (input.matches("mark(\\s+\\d+)?")) {
                     if (!input.matches("mark\\s+\\d+")) {
-                        throw new PrismException("OOPS!!! Please tell me which task number to mark, e.g. 'mark 2'.");
+                        throw new PrismException("!!! Please tell me which task number to mark, e.g. 'mark 2'.");
                     }
                     taskNum = Integer.parseInt(input.substring(5).trim());
-                    if (taskNum <= 0 || taskNum > index) {
-                        throw new PrismException("OOPS!!! That task number doesn't exist. You currently have "
-                                + index + " task(s).");
+                    if (taskNum <= 0 || taskNum > list.size()) {
+                        throw new PrismException("!!! That task number doesn't exist. You currently have "
+                                + list.size() + " task(s).");
                     }
-                    list[taskNum - 1].markAsDone();
-                    System.out.println("Nice! I've marked this task as done:\n" + list[taskNum - 1].toString());
+                    list.get(taskNum - 1).markAsDone();
+                    System.out.println("Nice! I've marked this task as done:\n" + list.get(taskNum - 1).toString());
 
                 } else if (input.matches("unmark(\\s+\\d+)?")) {
                     if (!input.matches("unmark\\s+\\d+")) {
-                        throw new PrismException("OOPS!!! Please tell me which task number to unmark, e.g. 'unmark 2'.");
+                        throw new PrismException("!!! Please tell me which task number to unmark, e.g. 'unmark 2'.");
                     }
                     taskNum = Integer.parseInt(input.substring(7).trim());
-                    if (taskNum <= 0 || taskNum > index) {
-                        throw new PrismException("OOPS!!! That task number doesn't exist. You currently have "
-                                + index + " task(s).");
+                    if (taskNum <= 0 || taskNum > list.size()) {
+                        throw new PrismException("!!! That task number doesn't exist. You currently have "
+                                + list.size() + " task(s).");
                     }
-                    list[taskNum - 1].markAsNotDone();
-                    System.out.println("OK, I've marked this task as not done yet:\n" + list[taskNum - 1].toString());
+                    list.get(taskNum - 1).markAsNotDone();
+                    System.out.println("OK, I've marked this task as not done yet:\n" + list.get(taskNum - 1).toString());
+
+                } else if (input.matches("delete(\\s+\\d+)?")) {
+                    if (!input.matches("delete\\s+\\d+")) {
+                        throw new PrismException("!!! Please tell me which task number to delete, e.g. 'delete 3'.");
+                    }
+                    taskNum = Integer.parseInt(input.substring(7).trim());
+                    if (taskNum <= 0 || taskNum > list.size()) {
+                        throw new PrismException("!!! That task number doesn't exist. You currently have "
+                                + list.size() + " task(s).");
+                    }
+                    Task removed = list.remove(taskNum - 1);
+                    System.out.println(
+                            "Noted. I've removed this task:\n"
+                                    + "  " + removed.toString() + "\n"
+                                    + "Now you have " + list.size() + " tasks in the list."
+                    );
 
                 } else if (input.matches("todo(\\s.*)?")) {
                     if (!input.matches("^todo\\s+.+$")) {
-                        throw new PrismException("OOPS!!! The description of a todo cannot be empty.");
+                        throw new PrismException("!!! The description of a todo cannot be empty.");
                     }
-                    if (index >= list.length) {
-                        throw new PrismException("OOPS!!! Your task list is full, I can't add any more tasks.");
-                    }
-                    list[index++] = new Todo(input.substring(5).trim());
+                    list.add(new Todo(input.substring(5).trim()));
                     System.out.println(
                             "Got it. I've added this task:\n"
-                                    + list[index - 1].toString() + "\n"
-                                    + "Now you have " + index + " tasks in the list."
+                                    + list.get(list.size() - 1).toString() + "\n"
+                                    + "Now you have " + list.size() + " tasks in the list."
                     );
 
                 } else if (input.matches("deadline(\\s.*)?")) {
@@ -74,19 +88,16 @@ public class Prism {
                                 "!!! A deadline needs a description and a '/by' time, "
                                         + "e.g. 'deadline return book /by Sunday'.");
                     }
-                    if (index >= list.length) {
-                        throw new PrismException("OOPS!!! Your task list is full, I can't add any more tasks.");
-                    }
                     String[] parts = input.substring(9).split(" /by ", 2);
                     if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
                         throw new PrismException(
-                                "OOPS!!! A deadline needs both a description and a '/by' time.");
+                                "!!! A deadline needs both a description and a '/by' time.");
                     }
-                    list[index++] = new Deadline(parts[0].trim(), parts[1].trim());
+                    list.add(new Deadline(parts[0].trim(), parts[1].trim()));
                     System.out.println(
                             "Got it. I've added this task:\n"
-                                    + list[index - 1].toString() + "\n"
-                                    + "Now you have " + index + " tasks in the list."
+                                    + list.get(list.size() - 1).toString() + "\n"
+                                    + "Now you have " + list.size() + " tasks in the list."
                     );
 
                 } else if (input.matches("event(\\s.*)?")) {
@@ -95,24 +106,21 @@ public class Prism {
                                 "!!! An event needs a description, a '/from' time, and a '/to' time, "
                                         + "e.g. 'event project meeting /from Mon 2pm /to 4pm'.");
                     }
-                    if (index >= list.length) {
-                        throw new PrismException("!!! Your task list is full, I can't add any more tasks.");
-                    }
                     String[] parts = input.substring(6).split(" /from | /to ", 3);
                     if (parts.length < 3 || parts[0].trim().isEmpty()
                             || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
                         throw new PrismException(
                                 "!!! An event needs a description, a '/from' time, and a '/to' time.");
                     }
-                    list[index++] = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
+                    list.add(new Event(parts[0].trim(), parts[1].trim(), parts[2].trim()));
                     System.out.println(
                             "Got it. I've added this task:\n"
-                                    + list[index - 1].toString() + "\n"
-                                    + "Now you have " + index + " tasks in the list."
+                                    + list.get(list.size() - 1).toString() + "\n"
+                                    + "Now you have " + list.size() + " tasks in the list."
                     );
 
                 } else {
-                    throw new PrismException("I'm sorry, but I don't understand what that means");
+                    throw new PrismException("!!! I'm sorry, but I don't know what that means");
                 }
 
             } catch (PrismException e) {
