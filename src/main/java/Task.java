@@ -1,0 +1,40 @@
+public class Task {
+    protected String description;
+    protected boolean isDone;
+
+    public Task(String description) {
+        this.description = description;
+        this.isDone = false;
+    }
+
+    public String getStatusIcon() {
+        return (isDone ? "X" : " "); // mark done task with X
+    }
+
+    public void markAsDone(){
+        if(this.isDone){
+            System.out.println("Task already marked as done\n");
+        } else {
+            this.isDone = true;
+            System.out.println("Nice! I've marked this task as done:\n"+this.toString()+"\n");
+        }
+    }
+
+    public void markAsNotDone(){
+        if(!this.isDone){
+            System.out.println("Task already marked as not done\n");
+        } else {
+            this.isDone = false;
+            System.out.println("OK, I've marked this task as not done yet:\n"+this.toString()+"\n");
+        }
+    }
+
+    public String getDescription(){
+        return this.description;
+    }
+
+    @Override
+    public String toString() {
+        return "["+getStatusIcon()+"] "+ getDescription();
+    }
+}
