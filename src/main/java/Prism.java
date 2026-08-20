@@ -3,6 +3,8 @@ import java.util.Scanner;
 
 public class Prism {
     public static void main(String[] args) {
+        String[] list= new String[100];
+        int index=0;
         String banner =
                 "____________________________________________________________\n"
                 +" ____       _               \n"
@@ -18,11 +20,21 @@ public class Prism {
         String input = sc.nextLine();
 
         while(!Objects.equals(input, "bye")){
-            System.out.println(
-                    "____________________________________________________________\n"
-                    +input+"\n"
-                    +"____________________________________________________________\n"
-            );
+            System.out.println( "____________________________________________________________\n");
+            if(Objects.equals(input,"list")){
+                for(int i=0; i<index; i++){
+                    System.out.println((i+1)+". "+list[i]);
+                }
+
+            }
+            else {
+                list[index++] = input;
+                System.out.println(
+                        "added: "
+                        + input + "\n"
+                );
+            }
+            System.out.println( "____________________________________________________________\n");
             input = sc.nextLine();
         }
         System.out.println(
