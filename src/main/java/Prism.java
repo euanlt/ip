@@ -25,7 +25,7 @@ public class Prism {
             if(Objects.equals(input,"list")){
                 System.out.println("Here are the tasks in your list:\n");
                 for(int i=0; i<index; i++){
-                    System.out.println((i+1)+".["+list[i].getStatusIcon()+"] "+list[i].description);
+                    System.out.println((i+1)+"."+list[i].toString());
                 }
             } else if (input.matches("mark \\d+")) {
                 taskNum = Integer.parseInt(input.substring(5));
@@ -44,11 +44,37 @@ public class Prism {
                 }
 
             }else {
-                list[index++] = new Task(input);
-                System.out.println(
-                        "added: "
-                        + input + "\n"
-                );
+                if(input.matches("^todo\\s+.+$")){
+                    list[index++] = new Todo(input.substring(5));
+
+                    System.out.println(
+                        "Got it. I've added this task:\n"
+                        +list[index-1].toString()+"\n"
+                        +"Now you have "+ index + " tasks in the list."
+                    );
+
+                } else if (input.matches("^deadline\\s+.+\\s+/by\\s+\\w+$")) {
+                    String[] parts = input.substring(9).split(" /by ");
+                    list[index++] = new Deadline(parts[0], parts[1]);
+
+                    System.out.println(
+                            "Got it. I've added this task:\n"
+                            +list[index-1].toString()+"\n"
+                            +"Now you have "+ index + " tasks in the list."
+                    );
+                } else if (input.matches("^event\\s+.+\\s+/from\\s+.+\\s+/to\\s+.+$")) {
+                    String[] parts = input.substring(6).split(" /from | /to ");
+                    list[index++] = new Event(parts[0],parts[1],parts[2]);
+                    System.out.println(
+                            "Got it. I've added this task:\n"
+                            +list[index-1].toString()+"\n"
+                            +"Now you have "+ index + " tasks in the list."
+                    );
+                } else{
+                    System.out.println("Invalid request");
+                }
+
+
             }
             System.out.println( "____________________________________________________________\n");
             input = sc.nextLine();
