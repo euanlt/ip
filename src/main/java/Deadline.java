@@ -6,6 +6,15 @@ public class Deadline extends Task{
         this.by = by;
     }
 
+    public String getBy() {
+        return this.by;
+    }
+
+    @Override
+    public String toFileFormat() {
+        return super.toFileFormat() + " | " + by;
+    }
+
     @Override
     public String toString() {
         return super.toString() + " (by: " + by + ")";
