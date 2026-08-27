@@ -10,7 +10,7 @@ public class Task {
     }
 
     public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
+        return (isDone ? "X" : " ");
     }
 
     public void markAsDone(){
@@ -35,6 +35,18 @@ public class Task {
         return this.description;
     }
 
+    public boolean isDone() {
+        return this.isDone;
+    }
+
+    public TaskType getType() {
+        return this.type;
+    }
+
+
+    public String toFileFormat() {
+        return type.getSymbol() + " | " + (isDone ? "1" : "0") + " | " + description;
+    }
 
     @Override
     public String toString() {
