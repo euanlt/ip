@@ -49,11 +49,15 @@ public class Parser {
         }
     }
 
-    public static String parseTodoDescription(String command) throws PrismException {
-        if (!command.matches("^todo\\s+.+$")) {
+    public static String parseTodoDescription(String fullCommand) throws PrismException {
+        // Extract everything after "todo" and trim standard whitespace
+        String description = fullCommand.substring(4).trim();
+
+        if (description.isEmpty()) {
             throw new PrismException("!!! The description of a todo cannot be empty.");
         }
-        return command.substring(5).trim();
+
+        return description;
     }
 
     public static String[] parseDeadlineArgs(String command) throws PrismException {
