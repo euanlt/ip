@@ -1,5 +1,0 @@
-T | 0 | lol
-T | 0 | fart
-T | 0 | run
-T | 0 | walk
-D | 0 | task | 2026-09-21 2359
