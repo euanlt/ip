@@ -119,6 +119,46 @@ void main() {
                                 + "Now you have " + list.size() + " tasks in the list."
                 );
 
+            } else if (input.matches("date(\\s.*)?")) {
+                if (!input.matches("^date\\s+(\\d{4}-\\d{2}-\\d{2}|\\d{1,2}/\\d{1,2}/\\d{4})$")) {
+                    throw new PrismException(
+                            "!!! Please specify a date in yyyy-MM-dd or d/M/yyyy format, e.g. 'date 2019-12-02'.");
+                }
+                String dateStr = input.substring(4).trim();
+                java.time.LocalDate queryDate;
+                try {
+                    queryDate = java.time.LocalDate.parse(
+                            dateStr,
+                            java.time.format.DateTimeFormatter.ofPattern("[d/M/yyyy][yyyy-MM-dd]"));
+                } catch (java.time.format.DateTimeParseException e) {
+                    throw new PrismException("!!! Invalid date format.");
+                }
+
+                IO.println("Here are the tasks occurring on "
+                        + queryDate.format(java.time.format.DateTimeFormatter.ofPattern("MMM dd yyyy")) + ":\n");
+                int count = 0;
+                for (Task task : list) {
+                    if (task instanceof Deadline) {
+                        Deadline deadline = (Deadline) task;
+                        if (deadline.getBy().toLocalDate().equals(queryDate)) {
+                            IO.println("  " + task);
+                            count++;
+                        }
+                    } else if (task instanceof Event) {
+                        Event event = (Event) task;
+                        java.time.LocalDate startDate = event.getFrom().toLocalDate();
+                        java.time.LocalDate endDate = event.getTo().toLocalDate();
+                        boolean isWithinRange = (queryDate.isEqual(startDate) || queryDate.isAfter(startDate))
+                                && (queryDate.isEqual(endDate) || queryDate.isBefore(endDate));
+                        if (isWithinRange) {
+                            IO.println("  " + task);
+                            count++;
+                        }
+                    }
+                }
+                if (count == 0) {
+                    IO.println("  No matching tasks found.");
+                }
             } else {
                 throw new PrismException("!!! I'm sorry, but I don't know what that means");
             }
