@@ -76,6 +76,10 @@ public class Prism {
                         handleDate(fullCommand);
                         break;
 
+                    case FIND:
+                        handleFind(fullCommand);
+                        break;
+
                     default:
                         throw new PrismException("!!! Unknown command.");
                 }
@@ -169,6 +173,21 @@ public class Prism {
         }
         for (Task task : matchingTasks) {
             this.ui.showMessage("  " + task);
+        }
+    }
+
+    /** Displays tasks whose descriptions contain the keyword supplied in the command. */
+    private void handleFind(String command) throws PrismException {
+        String keyword = Parser.parseFindKeyword(command);
+        List<Task> matchingTasks = this.tasks.findTasks(keyword);
+
+        this.ui.showMessage("Here are the matching tasks in your list:\n");
+        if (matchingTasks.isEmpty()) {
+            this.ui.showMessage("  No matching tasks found.");
+            return;
+        }
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            this.ui.showMessage((i + 1) + "." + matchingTasks.get(i));
         }
     }
 

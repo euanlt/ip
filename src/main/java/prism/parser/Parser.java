@@ -11,7 +11,7 @@ public class Parser {
             DateTimeFormatter.ofPattern("[d/M/yyyy][yyyy-MM-dd]");
 
     public enum CommandType {
-        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, DATE
+        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, DATE, FIND
     }
 
     /** Identifies the command represented by a complete user input string. */
@@ -35,6 +35,8 @@ public class Parser {
             return CommandType.EVENT;
         } else if (trimmed.matches("date(\\s.*)?")) {
             return CommandType.DATE;
+        } else if (trimmed.matches("find(\\s.*)?")) {
+            return CommandType.FIND;
         } else {
             throw new PrismException("!!! I'm sorry, but I don't know what that means");
         }
@@ -62,6 +64,17 @@ public class Parser {
         }
 
         return description;
+    }
+
+    /** Extracts and validates the keyword from a find command. */
+    public static String parseFindKeyword(String fullCommand) throws PrismException {
+        String keyword = fullCommand.substring(4).trim();
+
+        if (keyword.isEmpty()) {
+            throw new PrismException("!!! Please provide a keyword to search for.");
+        }
+
+        return keyword;
     }
 
     /** Extracts the description and due time from a deadline command. */

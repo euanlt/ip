@@ -3,6 +3,7 @@ package prism.tasklist;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import prism.PrismException;
 import prism.task.Deadline;
 import prism.task.Event;
@@ -84,6 +85,18 @@ public class TaskList {
                 if (isWithinRange) {
                     matchingTasks.add(task);
                 }
+            }
+        }
+        return matchingTasks;
+    }
+
+    /** Returns tasks whose descriptions contain the supplied keyword, ignoring case. */
+    public List<Task> findTasks(String keyword) {
+        List<Task> matchingTasks = new ArrayList<>();
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        for (Task task : this.tasks) {
+            if (task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
+                matchingTasks.add(task);
             }
         }
         return matchingTasks;
