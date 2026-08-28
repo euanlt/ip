@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import prism.PrismException;
 
+/** Represents a task that must be completed by a specified date and time. */
 public class Deadline extends Task {
     private static final DateTimeFormatter INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("[d/M/yyyy HHmm][yyyy-MM-dd HHmm]");
@@ -15,11 +16,13 @@ public class Deadline extends Task {
 
     protected LocalDateTime by;
 
+    /** Creates a deadline, accepting either supported date format. */
     public Deadline(String description, String by) throws PrismException {
         super(description, TaskType.DEADLINE);
         this.by = parseDateTime(by);
     }
 
+    /** Parses a deadline date and applies the end-of-day time when only a date is supplied. */
     private LocalDateTime parseDateTime(String text) throws PrismException {
         try {
             String trimmedText = text.trim();
@@ -33,15 +36,18 @@ public class Deadline extends Task {
         }
     }
 
+    /** Returns the deadline date and time. */
     public LocalDateTime getBy() {
         return this.by;
     }
 
+    /** Returns the serialized deadline representation. */
     @Override
     public String toFileFormat() {
         return super.toFileFormat() + " | " + this.by.format(FILE_FORMATTER);
     }
 
+    /** Returns the human-readable deadline representation. */
     @Override
     public String toString() {
         return super.toString() + " (by: " + this.by.format(OUTPUT_FORMATTER) + ")";

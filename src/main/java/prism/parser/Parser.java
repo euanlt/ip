@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import prism.PrismException;
 
+/** Parses user commands and their task or date arguments. */
 public class Parser {
     private static final DateTimeFormatter DATE_INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("[d/M/yyyy][yyyy-MM-dd]");
@@ -13,6 +14,7 @@ public class Parser {
         BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, DATE
     }
 
+    /** Identifies the command represented by a complete user input string. */
     public static CommandType parseCommandType(String fullCommand) throws PrismException {
         String trimmed = fullCommand.trim();
         if (trimmed.equals("bye")) {
@@ -38,6 +40,7 @@ public class Parser {
         }
     }
 
+    /** Parses a one-based task number and returns its zero-based list index. */
     public static int parseIndex(String command, String prefix) throws PrismException {
         if (!command.matches("^" + prefix + "\\s+\\d+$")) {
             throw new PrismException("!!! Please tell me which task number to " + prefix + ", e.g. '" + prefix + " 2'.");
@@ -49,6 +52,7 @@ public class Parser {
         }
     }
 
+    /** Extracts and validates the description from a todo command. */
     public static String parseTodoDescription(String fullCommand) throws PrismException {
         // Extract everything after "todo" and trim standard whitespace
         String description = fullCommand.substring(4).trim();
@@ -60,6 +64,7 @@ public class Parser {
         return description;
     }
 
+    /** Extracts the description and due time from a deadline command. */
     public static String[] parseDeadlineArgs(String command) throws PrismException {
         if (!command.matches("^deadline\\s+.+\\s+/by\\s+.+$")) {
             throw new PrismException(
@@ -72,6 +77,7 @@ public class Parser {
         return new String[]{parts[0].trim(), parts[1].trim()};
     }
 
+    /** Extracts the description, start time, and end time from an event command. */
     public static String[] parseEventArgs(String command) throws PrismException {
         if (!command.matches("^event\\s+.+\\s+/from\\s+.+\\s+/to\\s+.+$")) {
             throw new PrismException(
@@ -84,6 +90,7 @@ public class Parser {
         return new String[]{parts[0].trim(), parts[1].trim(), parts[2].trim()};
     }
 
+    /** Parses the date argument from a date command. */
     public static LocalDate parseQueryDate(String command) throws PrismException {
         if (!command.matches("^date\\s+(\\d{4}-\\d{2}-\\d{2}|\\d{1,2}/\\d{1,2}/\\d{4})$")) {
             throw new PrismException("!!! Please specify a date in yyyy-MM-dd or d/M/yyyy format, e.g. 'date 2019-12-02'.");

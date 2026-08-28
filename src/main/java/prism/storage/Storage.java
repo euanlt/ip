@@ -13,13 +13,16 @@ import prism.task.Event;
 import prism.task.Task;
 import prism.task.Todo;
 
+/** Loads tasks from and saves tasks to Prism's data file. */
 public class Storage {
     private final String filePath;
 
+    /** Creates storage backed by the specified file path. */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /** Loads valid task entries from disk, skipping malformed entries. */
     public List<Task> load() {
         List<Task> tasks = new ArrayList<>();
         File file = prepareFile();
@@ -53,6 +56,7 @@ public class Storage {
         return tasks;
     }
 
+    /** Converts one serialized data-file line into a task, or {@code null} if invalid. */
     private Task parseLine(String line) {
         String[] parts = line.split("\\s*\\|\\s*");
         if (parts.length < 3) {
@@ -79,6 +83,7 @@ public class Storage {
         return task;
     }
 
+    /** Creates a task from its serialized type and fields. */
     private Task createTaskFromParts(String typeSymbol, String description, String[] parts) {
         try {
             switch (typeSymbol) {
@@ -105,6 +110,7 @@ public class Storage {
         }
     }
 
+    /** Writes all supplied tasks to disk in the Prism data format. */
     public void save(List<Task> tasks) {
         File file = new File(this.filePath);
         File parentDir = file.getParentFile();
@@ -123,6 +129,7 @@ public class Storage {
         }
     }
 
+    /** Creates the data file and its parent directory when necessary. */
     private File prepareFile() {
         File file = new File(this.filePath);
         File parentDir = file.getParentFile();
