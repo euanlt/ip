@@ -37,4 +37,14 @@ public class ParserTest {
         String input = "todo     ";
         assertThrows(PrismException.class, () -> Parser.parseTodoDescription(input));
     }
+
+    @Test
+    public void parseFindKeyword_validInput_returnsTrimmedKeyword() throws PrismException {
+        assertEquals("book", Parser.parseFindKeyword("find    book   "));
+    }
+
+    @Test
+    public void parseFindKeyword_emptyKeyword_throwsException() {
+        assertThrows(PrismException.class, () -> Parser.parseFindKeyword("find   "));
+    }
 }
