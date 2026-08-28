@@ -1,8 +1,7 @@
+package prism.ui;
+
 import java.util.Scanner;
 
-/**
- * Handles all user interactions and output formatting for Prism.
- */
 public class Ui {
     private static final String LINE = "____________________________________________________________\n";
     private static final String LOGO =
@@ -34,10 +33,6 @@ public class Ui {
 
     public void showError(String message) {
         System.out.println(message);
-    }
-
-    public void showLoadingError() {
-        System.out.println("!!! Could not load saved tasks. Starting with an empty list.");
     }
 
     public void showMessage(String message) {

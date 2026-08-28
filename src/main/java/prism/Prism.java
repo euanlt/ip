@@ -1,10 +1,17 @@
+package prism;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import prism.parser.Parser;
+import prism.storage.Storage;
+import prism.task.Deadline;
+import prism.task.Event;
+import prism.task.Task;
+import prism.task.Todo;
+import prism.tasklist.TaskList;
+import prism.ui.Ui;
 
-/**
- * Main entry point for the Prism task manager application.
- */
 public class Prism {
     private static final DateTimeFormatter DISPLAY_DATE_FORMATTER =
             DateTimeFormatter.ofPattern("MMM dd yyyy");
@@ -99,12 +106,14 @@ public class Prism {
         int index = Parser.parseIndex(command, "mark");
         Task task = this.tasks.markTask(index);
         this.storage.save(this.tasks.getTasks());
+        this.ui.showMessage("Nice! I've marked this task as done:\n  " + task);
     }
 
     private void handleUnmark(String command) throws PrismException {
         int index = Parser.parseIndex(command, "unmark");
         Task task = this.tasks.unmarkTask(index);
         this.storage.save(this.tasks.getTasks());
+        this.ui.showMessage("OK, I've marked this task as not done yet:\n  " + task);
     }
 
     private void handleDelete(String command) throws PrismException {

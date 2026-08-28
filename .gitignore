@@ -19,4 +19,4 @@ _temp/
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
 
-./data/prism.txt
+data/prism.txt

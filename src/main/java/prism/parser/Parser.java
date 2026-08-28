@@ -1,13 +1,17 @@
+package prism.parser;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import prism.PrismException;
 
-/**
- * Parses raw user input commands and extracts arguments.
- */
 public class Parser {
     private static final DateTimeFormatter DATE_INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("[d/M/yyyy][yyyy-MM-dd]");
+
+    public enum CommandType {
+        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, DATE
+    }
 
     public static CommandType parseCommandType(String fullCommand) throws PrismException {
         String trimmed = fullCommand.trim();
@@ -85,9 +89,5 @@ public class Parser {
         } catch (DateTimeParseException e) {
             throw new PrismException("!!! Invalid date format.");
         }
-    }
-
-    public enum CommandType {
-        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, DATE
     }
 }

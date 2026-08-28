@@ -1,15 +1,14 @@
+package prism.tasklist;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import prism.PrismException;
+import prism.task.Deadline;
+import prism.task.Event;
+import prism.task.Task;
 
-/**
- * Manages the in-memory list of tasks and operations on them.
- */
 public class TaskList {
-    private static final DateTimeFormatter DISPLAY_DATE_FORMATTER =
-            DateTimeFormatter.ofPattern("MMM dd yyyy");
-
     private final List<Task> tasks;
 
     public TaskList() {

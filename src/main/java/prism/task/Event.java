@@ -1,11 +1,11 @@
+package prism.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import prism.PrismException;
 
-/**
- * Represents a task with a single deadline date and time.
- */
-public class Deadline extends Task {
+public class Event extends Task {
     private static final DateTimeFormatter INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("[d/M/yyyy HHmm][yyyy-MM-dd HHmm]");
     private static final DateTimeFormatter OUTPUT_FORMATTER =
@@ -13,18 +13,20 @@ public class Deadline extends Task {
     private static final DateTimeFormatter FILE_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
-    protected LocalDateTime by;
+    protected LocalDateTime from;
+    protected LocalDateTime to;
 
-    public Deadline(String description, String by) throws PrismException {
-        super(description, TaskType.DEADLINE);
-        this.by = parseDateTime(by);
+    public Event(String description, String from, String to) throws PrismException {
+        super(description, TaskType.EVENT);
+        this.from = parseDateTime(from);
+        this.to = parseDateTime(to);
     }
 
     private LocalDateTime parseDateTime(String text) throws PrismException {
         try {
             String trimmedText = text.trim();
             if (trimmedText.length() == 10) {
-                trimmedText += " 2359";
+                trimmedText += " 0000";
             }
             return LocalDateTime.parse(trimmedText, INPUT_FORMATTER);
         } catch (DateTimeParseException e) {
@@ -33,17 +35,23 @@ public class Deadline extends Task {
         }
     }
 
-    public LocalDateTime getBy() {
-        return this.by;
+    public LocalDateTime getFrom() {
+        return this.from;
+    }
+
+    public LocalDateTime getTo() {
+        return this.to;
     }
 
     @Override
     public String toFileFormat() {
-        return super.toFileFormat() + " | " + this.by.format(FILE_FORMATTER);
+        return super.toFileFormat() + " | " + this.from.format(FILE_FORMATTER)
+                + " | " + this.to.format(FILE_FORMATTER);
     }
 
     @Override
     public String toString() {
-        return super.toString() + " (by: " + this.by.format(OUTPUT_FORMATTER) + ")";
+        return super.toString() + " (from: " + this.from.format(OUTPUT_FORMATTER)
+                + " to: " + this.to.format(OUTPUT_FORMATTER) + ")";
     }
 }

@@ -1,3 +1,5 @@
+package prism.task;
+
 public enum TaskType {
     TODO("T"),
     DEADLINE("D"),
@@ -10,6 +12,6 @@ public enum TaskType {
     }
 
     public String getSymbol() {
-        return symbol;
+        return this.symbol;
     }
 }

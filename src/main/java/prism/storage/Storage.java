@@ -1,32 +1,25 @@
+package prism.storage;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import prism.PrismException;
+import prism.task.Deadline;
+import prism.task.Event;
+import prism.task.Task;
+import prism.task.Todo;
 
-/**
- * Handles reading tasks from and writing tasks to the hard disk storage file.
- */
 public class Storage {
-    private static final DateTimeFormatter FILE_DATE_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-
     private final String filePath;
 
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
-    /**
-     * Loads saved tasks from the data file.
-     *
-     * @return List of parsed tasks. Returns an empty list if the file is missing or corrupted.
-     */
     public List<Task> load() {
         List<Task> tasks = new ArrayList<>();
         File file = prepareFile();
@@ -60,12 +53,6 @@ public class Storage {
         return tasks;
     }
 
-    /**
-     * Parses a single line from the storage file into a Task object.
-     *
-     * @param line Text line read from storage.
-     * @return Corresponding Task object, or null if the line is formatted incorrectly.
-     */
     private Task parseLine(String line) {
         String[] parts = line.split("\\s*\\|\\s*");
         if (parts.length < 3) {
@@ -86,15 +73,12 @@ public class Storage {
         }
 
         if (doneFlag.equals("1")) {
-            task.isDone = true;
+            task.markAsDone();
         }
 
         return task;
     }
 
-    /**
-     * Instantiates the specific Task subclass based on type symbol and parameters.
-     */
     private Task createTaskFromParts(String typeSymbol, String description, String[] parts) {
         try {
             switch (typeSymbol) {
@@ -117,16 +101,10 @@ public class Storage {
                     return null;
             }
         } catch (PrismException e) {
-            // Fails gracefully if date parsing fails in Deadline/Event constructors
             return null;
         }
     }
 
-    /**
-     * Saves the current list of tasks to the storage file.
-     *
-     * @param tasks List of tasks to write to disk.
-     */
     public void save(List<Task> tasks) {
         File file = new File(this.filePath);
         File parentDir = file.getParentFile();
@@ -145,9 +123,6 @@ public class Storage {
         }
     }
 
-    /**
-     * Prepares the file and parent directories, creating them if necessary.
-     */
     private File prepareFile() {
         File file = new File(this.filePath);
         File parentDir = file.getParentFile();
