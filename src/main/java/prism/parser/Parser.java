@@ -40,7 +40,8 @@ public class Parser {
 
     public static int parseIndex(String command, String prefix) throws PrismException {
         if (!command.matches("^" + prefix + "\\s+\\d+$")) {
-            throw new PrismException("!!! Please tell me which task number to " + prefix + ", e.g. '" + prefix + " 2'.");
+            throw new PrismException("!!! Please tell me which task number to " + prefix
+                    + ", e.g. '" + prefix + " 2'.");
         }
         try {
             return Integer.parseInt(command.substring(prefix.length()).trim()) - 1;
@@ -63,7 +64,8 @@ public class Parser {
     public static String[] parseDeadlineArgs(String command) throws PrismException {
         if (!command.matches("^deadline\\s+.+\\s+/by\\s+.+$")) {
             throw new PrismException(
-                    "!!! A deadline needs a description and a '/by' time, e.g. 'deadline return book /by 2019-12-02 1800'.");
+                    "!!! A deadline needs a description and a '/by' time, e.g. "
+                            + "'deadline return book /by 2019-12-02 1800'.");
         }
         String[] parts = command.substring(9).split(" /by ", 2);
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
@@ -86,7 +88,8 @@ public class Parser {
 
     public static LocalDate parseQueryDate(String command) throws PrismException {
         if (!command.matches("^date\\s+(\\d{4}-\\d{2}-\\d{2}|\\d{1,2}/\\d{1,2}/\\d{4})$")) {
-            throw new PrismException("!!! Please specify a date in yyyy-MM-dd or d/M/yyyy format, e.g. 'date 2019-12-02'.");
+            throw new PrismException("!!! Please specify a date in yyyy-MM-dd or d/M/yyyy format, "
+                    + "e.g. 'date 2019-12-02'.");
         }
         try {
             return LocalDate.parse(command.substring(4).trim(), DATE_INPUT_FORMATTER);
