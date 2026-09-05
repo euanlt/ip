@@ -10,6 +10,7 @@ public class Parser {
     private static final DateTimeFormatter DATE_INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("[d/M/yyyy][yyyy-MM-dd]");
 
+    /** Identifies the commands understood by the application. */
     public enum CommandType {
         BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, DATE, FIND
     }
