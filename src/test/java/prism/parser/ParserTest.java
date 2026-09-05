@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+
 import prism.PrismException;
 
 public class ParserTest {
@@ -25,10 +26,7 @@ public class ParserTest {
     @Test
     public void parseTodoDescription_emptyDescription_throwsException() {
         String input = "todo";
-        PrismException exception = assertThrows(
-                PrismException.class,
-                () -> Parser.parseTodoDescription(input)
-        );
+        PrismException exception = assertThrows(PrismException.class, () -> Parser.parseTodoDescription(input));
         assertEquals("!!! The description of a todo cannot be empty.", exception.getMessage());
     }
 
