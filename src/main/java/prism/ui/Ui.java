@@ -13,10 +13,19 @@ public class Ui {
                     + "|_|   |_|  |_|___/_| |_| |_|\n";
 
     private final Scanner scanner;
+    private final boolean isConsole;
+    private final StringBuilder messages;
 
     /** Creates a UI connected to standard input. */
     public Ui() {
+        this(true);
+    }
+
+    /** Creates a UI configured for console output or programmatic output. */
+    public Ui(boolean isConsole) {
         this.scanner = new Scanner(System.in);
+        this.isConsole = isConsole;
+        this.messages = new StringBuilder();
     }
 
     /** Reads the next complete command from the user. */
@@ -38,12 +47,16 @@ public class Ui {
 
     /** Displays an error message. */
     public void showError(String message) {
-        System.out.println(message);
+        showMessage(message);
     }
 
     /** Displays a general application message. */
     public void showMessage(String message) {
-        System.out.println(message);
+        if (this.isConsole) {
+            System.out.println(message);
+        } else {
+            this.messages.append(message).append(System.lineSeparator());
+        }
     }
 
     /** Displays the exit message. */
@@ -56,5 +69,12 @@ public class Ui {
     /** Closes the input scanner. */
     public void close() {
         this.scanner.close();
+    }
+
+    /** Returns and clears messages accumulated for a non-console UI. */
+    public String collectMessages() {
+        String output = this.messages.toString();
+        this.messages.setLength(0);
+        return output;
     }
 }

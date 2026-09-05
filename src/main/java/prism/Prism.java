@@ -24,7 +24,12 @@ public class Prism {
 
     /** Creates a Prism application backed by the specified data file. */
     public Prism(String filePath) {
-        this.ui = new Ui();
+        this(filePath, new Ui());
+    }
+
+    /** Creates a Prism application using the supplied UI adapter. */
+    public Prism(String filePath, Ui ui) {
+        this.ui = ui;
         this.storage = new Storage(filePath);
         this.tasks = new TaskList(this.storage.load());
     }
@@ -38,11 +43,21 @@ public class Prism {
             String fullCommand = this.ui.readCommand();
             this.ui.showLine();
 
-            try {
-                Parser.CommandType commandType = Parser.parseCommandType(fullCommand);
-                switch (commandType) {
+            this.executeCommand(fullCommand);
+            isExit = fullCommand.trim().equals("bye");
+            this.ui.showLine();
+        }
+
+        this.ui.showBye();
+        this.ui.close();
+    }
+
+    /** Executes one command and returns all messages produced by it. */
+    public String executeCommand(String fullCommand) {
+        try {
+            Parser.CommandType commandType = Parser.parseCommandType(fullCommand);
+            switch (commandType) {
                     case BYE:
-                        isExit = true;
                         break;
 
                     case LIST:
@@ -84,15 +99,10 @@ public class Prism {
                     default:
                         throw new PrismException("!!! Unknown command.");
                 }
-            } catch (PrismException e) {
-                this.ui.showError(e.getMessage());
-            }
-
-            this.ui.showLine();
+        } catch (PrismException e) {
+            this.ui.showError(e.getMessage());
         }
-
-        this.ui.showBye();
-        this.ui.close();
+        return this.ui.collectMessages();
     }
 
     /** Displays all tasks currently stored in the task list. */
