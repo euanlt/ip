@@ -96,6 +96,10 @@ public class Prism {
                     handleFind(fullCommand);
                     break;
 
+                case SNOOZE:
+                    handleSnooze(fullCommand);
+                    break;
+
                 default:
                     throw new PrismException("!!! Unknown command.");
             }
@@ -202,6 +206,15 @@ public class Prism {
         for (int i = 0; i < matchingTasks.size(); i++) {
             this.ui.showMessage((i + 1) + "." + matchingTasks.get(i));
         }
+    }
+
+    /** Reschedules the selected deadline or event and persists the change. */
+    private void handleSnooze(String command) throws PrismException {
+        String[] args = Parser.parseSnoozeArgs(command);
+        int index = Parser.parseIndex("snooze " + args[0], "snooze");
+        Task task = this.tasks.snoozeTask(index, args[1]);
+        this.storage.save(this.tasks.getTasks());
+        this.ui.showMessage("Got it. I've snoozed this task to " + args[1] + ":\n  " + task);
     }
 
     /** Displays the standard confirmation message for a newly added task. */

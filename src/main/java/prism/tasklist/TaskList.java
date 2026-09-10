@@ -73,6 +73,20 @@ public class TaskList {
         return task;
     }
 
+    /** Reschedules the task at the supplied index. */
+    public Task snoozeTask(int index, String newDateTime) throws PrismException {
+        validateIndex(index);
+        Task task = this.tasks.get(index);
+        if (task instanceof Deadline) {
+            ((Deadline) task).reschedule(newDateTime);
+        } else if (task instanceof Event) {
+            ((Event) task).reschedule(newDateTime);
+        } else {
+            throw new PrismException("!!! Only deadlines and events can be snoozed.");
+        }
+        return task;
+    }
+
     /** Returns deadlines and events occurring on the supplied date. */
     public List<Task> getTasksOnDate(LocalDate queryDate) {
         return this.tasks.stream()

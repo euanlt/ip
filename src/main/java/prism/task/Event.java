@@ -1,5 +1,6 @@
 package prism.task;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -47,6 +48,14 @@ public class Event extends Task {
     /** Returns the event end date and time. */
     public LocalDateTime getTo() {
         return this.to;
+    }
+
+    /** Reschedules this event's start while preserving its duration. */
+    public void reschedule(String newFrom) throws PrismException {
+        LocalDateTime rescheduledFrom = parseDateTime(newFrom);
+        Duration duration = Duration.between(this.from, this.to);
+        this.from = rescheduledFrom;
+        this.to = rescheduledFrom.plus(duration);
     }
 
     /** Returns the serialized event representation. */
