@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import prism.PrismException;
 import prism.task.Deadline;
@@ -74,37 +75,33 @@ public class TaskList {
 
     /** Returns deadlines and events occurring on the supplied date. */
     public List<Task> getTasksOnDate(LocalDate queryDate) {
-        List<Task> matchingTasks = new ArrayList<>();
-        for (Task task : this.tasks) {
-            if (task instanceof Deadline) {
-                Deadline deadline = (Deadline) task;
-                if (deadline.getBy().toLocalDate().equals(queryDate)) {
-                    matchingTasks.add(task);
-                }
-            } else if (task instanceof Event) {
-                Event event = (Event) task;
-                LocalDate startDate = event.getFrom().toLocalDate();
-                LocalDate endDate = event.getTo().toLocalDate();
-                boolean isWithinRange = (queryDate.isEqual(startDate) || queryDate.isAfter(startDate))
-                        && (queryDate.isEqual(endDate) || queryDate.isBefore(endDate));
-                if (isWithinRange) {
-                    matchingTasks.add(task);
-                }
-            }
-        }
-        return matchingTasks;
+        return this.tasks.stream()
+                .filter(task -> isTaskOnDate(task, queryDate))
+                .collect(Collectors.toList());
     }
 
     /** Returns tasks whose descriptions contain the supplied keyword, ignoring case. */
     public List<Task> findTasks(String keyword) {
-        List<Task> matchingTasks = new ArrayList<>();
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
-        for (Task task : this.tasks) {
-            if (task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
-                matchingTasks.add(task);
-            }
+        return this.tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword))
+                .collect(Collectors.toList());
+    }
+
+    /** Returns whether a task occurs on the supplied date. */
+    private boolean isTaskOnDate(Task task, LocalDate queryDate) {
+        if (task instanceof Deadline) {
+            Deadline deadline = (Deadline) task;
+            return deadline.getBy().toLocalDate().equals(queryDate);
         }
-        return matchingTasks;
+        if (task instanceof Event) {
+            Event event = (Event) task;
+            LocalDate startDate = event.getFrom().toLocalDate();
+            LocalDate endDate = event.getTo().toLocalDate();
+            return (queryDate.isEqual(startDate) || queryDate.isAfter(startDate))
+                    && (queryDate.isEqual(endDate) || queryDate.isBefore(endDate));
+        }
+        return false;
     }
 
     /** Throws an exception when an index is outside the current list. */
