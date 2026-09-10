@@ -42,6 +42,11 @@ public class Deadline extends Task {
         return this.by;
     }
 
+    /** Reschedules this deadline to the supplied date and time. */
+    public void reschedule(String newBy) throws PrismException {
+        this.by = parseDateTime(newBy);
+    }
+
     /** Returns the serialized deadline representation. */
     @Override
     public String toFileFormat() {

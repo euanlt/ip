@@ -13,7 +13,7 @@ public class Parser {
 
     /** Identifies the commands understood by the application. */
     public enum CommandType {
-        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, DATE, FIND
+        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, DATE, FIND, SNOOZE
     }
 
     /** Identifies the command represented by a complete user input string. */
@@ -39,9 +39,21 @@ public class Parser {
             return CommandType.DATE;
         } else if (trimmed.matches("find(\\s.*)?")) {
             return CommandType.FIND;
+        } else if (trimmed.matches("snooze(\\s.*)?")) {
+            return CommandType.SNOOZE;
         } else {
             throw new PrismException("!!! I'm sorry, but I don't know what that means");
         }
+    }
+
+    /** Extracts the task number and new date from a snooze command. */
+    public static String[] parseSnoozeArgs(String command) throws PrismException {
+        if (!command.matches("^snooze\\s+\\d+\\s+/to\\s+.+$")) {
+            throw new PrismException("!!! Snooze needs a task number and a '/to' date/time, e.g. "
+                    + "'snooze 2 /to 2025-12-02 1800'.");
+        }
+        String[] parts = command.substring(7).split("\\s+/to\\s+", 2);
+        return new String[]{parts[0].trim(), parts[1].trim()};
     }
 
     /** Parses a one-based task number and returns its zero-based list index. */
