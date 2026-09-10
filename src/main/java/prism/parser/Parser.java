@@ -101,10 +101,20 @@ public class Parser {
                     "!!! An event needs a description, a '/from' time, and a '/to' time.");
         }
         String[] parts = command.substring(6).split(" /from | /to ", 3);
-        if (parts.length < 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
+        if (parts.length < 3 || hasEmptyPart(parts)) {
             throw new PrismException("!!! An event needs a description, a '/from' time, and a '/to' time.");
         }
         return new String[]{parts[0].trim(), parts[1].trim(), parts[2].trim()};
+    }
+
+    /** Returns whether any extracted event argument is empty after trimming. */
+    private static boolean hasEmptyPart(String[] parts) {
+        for (String part : parts) {
+            if (part.trim().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Parses the date argument from a date command. */
