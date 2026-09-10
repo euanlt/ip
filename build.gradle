@@ -35,6 +35,7 @@ javafx {
 
 test {
     useJUnitPlatform()
+    enableAssertions = true
 
     testLogging {
         events 'passed', 'skipped', 'failed'
@@ -64,4 +65,5 @@ shadowJar {
 
 run {
     standardInput = System.in
+    enableAssertions = true
 }
