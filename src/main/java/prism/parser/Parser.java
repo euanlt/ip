@@ -60,6 +60,7 @@ public class Parser {
     /** Extracts and validates the description from a todo command. */
     public static String parseTodoDescription(String fullCommand) throws PrismException {
         // Extract everything after "todo" and trim standard whitespace
+        assert fullCommand.startsWith("todo") : "Todo command must start with 'todo'";
         String description = fullCommand.substring(4).trim();
 
         if (description.isEmpty()) {
@@ -71,6 +72,7 @@ public class Parser {
 
     /** Extracts and validates the keyword from a find command. */
     public static String parseFindKeyword(String fullCommand) throws PrismException {
+        assert fullCommand.startsWith("find") : "Find command must start with 'find'";
         String keyword = fullCommand.substring(4).trim();
 
         if (keyword.isEmpty()) {
@@ -88,6 +90,7 @@ public class Parser {
                             + "'deadline return book /by 2019-12-02 1800'.");
         }
         String[] parts = command.substring(9).split(" /by ", 2);
+        assert parts.length == 2 : "Validated deadline command must have two parts";
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
             throw new PrismException("!!! A deadline needs both a description and a '/by' time.");
         }
@@ -101,6 +104,7 @@ public class Parser {
                     "!!! An event needs a description, a '/from' time, and a '/to' time.");
         }
         String[] parts = command.substring(6).split(" /from | /to ", 3);
+        assert parts.length == 3 : "Validated event command must have three parts";
         if (parts.length < 3 || hasEmptyPart(parts)) {
             throw new PrismException("!!! An event needs a description, a '/from' time, and a '/to' time.");
         }

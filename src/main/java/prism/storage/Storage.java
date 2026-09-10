@@ -77,6 +77,8 @@ public class Storage {
             return null;
         }
 
+        assert task.getDescription().equals(description) : "Loaded task must retain its description";
+
         if (doneFlag.equals("1")) {
             task.markAsDone();
         }
