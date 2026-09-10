@@ -37,6 +37,7 @@ public class TaskList {
     /** Returns the task at a zero-based index. */
     public Task getTask(int index) throws PrismException {
         validateIndex(index);
+        assert index >= 0 && index < this.tasks.size() : "Task index must be valid after validation";
         return this.tasks.get(index);
     }
 
@@ -49,12 +50,14 @@ public class TaskList {
     /** Removes and returns the task at a zero-based index. */
     public Task deleteTask(int index) throws PrismException {
         validateIndex(index);
+        assert index >= 0 && index < this.tasks.size() : "Task index must be valid after validation";
         return this.tasks.remove(index);
     }
 
     /** Marks the task at a zero-based index as done. */
     public Task markTask(int index) throws PrismException {
         validateIndex(index);
+        assert index >= 0 && index < this.tasks.size() : "Task index must be valid after validation";
         Task task = this.tasks.get(index);
         task.markAsDone();
         return task;
@@ -63,6 +66,7 @@ public class TaskList {
     /** Marks the task at a zero-based index as not done. */
     public Task unmarkTask(int index) throws PrismException {
         validateIndex(index);
+        assert index >= 0 && index < this.tasks.size() : "Task index must be valid after validation";
         Task task = this.tasks.get(index);
         task.markAsNotDone();
         return task;

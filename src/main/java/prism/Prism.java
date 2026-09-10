@@ -158,6 +158,7 @@ public class Prism {
     /** Creates and stores a deadline task from the command. */
     private void handleDeadline(String command) throws PrismException {
         String[] args = Parser.parseDeadlineArgs(command);
+        assert args.length == 2 : "Deadline parser must return description and due time";
         Task newTask = this.tasks.addTask(new Deadline(args[0], args[1]));
         this.storage.save(this.tasks.getTasks());
         showAddedTaskMessage(newTask);
@@ -166,6 +167,7 @@ public class Prism {
     /** Creates and stores an event task from the command. */
     private void handleEvent(String command) throws PrismException {
         String[] args = Parser.parseEventArgs(command);
+        assert args.length == 3 : "Event parser must return description and two endpoints";
         Task newTask = this.tasks.addTask(new Event(args[0], args[1], args[2]));
         this.storage.save(this.tasks.getTasks());
         showAddedTaskMessage(newTask);
