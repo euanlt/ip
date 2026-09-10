@@ -78,9 +78,11 @@ public class TaskList {
         validateIndex(index);
         Task task = this.tasks.get(index);
         if (task instanceof Deadline) {
-            ((Deadline) task).reschedule(newDateTime);
+            Deadline deadline = (Deadline) task;
+            deadline.reschedule(newDateTime);
         } else if (task instanceof Event) {
-            ((Event) task).reschedule(newDateTime);
+            Event event = (Event) task;
+            event.reschedule(newDateTime);
         } else {
             throw new PrismException("!!! Only deadlines and events can be snoozed.");
         }
