@@ -57,48 +57,48 @@ public class Prism {
         try {
             Parser.CommandType commandType = Parser.parseCommandType(fullCommand);
             switch (commandType) {
-                    case BYE:
-                        break;
+                case BYE:
+                    break;
 
-                    case LIST:
-                        handleList();
-                        break;
+                case LIST:
+                    handleList();
+                    break;
 
-                    case MARK:
-                        handleMark(fullCommand);
-                        break;
+                case MARK:
+                    handleMark(fullCommand);
+                    break;
 
-                    case UNMARK:
-                        handleUnmark(fullCommand);
-                        break;
+                case UNMARK:
+                    handleUnmark(fullCommand);
+                    break;
 
-                    case DELETE:
-                        handleDelete(fullCommand);
-                        break;
+                case DELETE:
+                    handleDelete(fullCommand);
+                    break;
 
-                    case TODO:
-                        handleTodo(fullCommand);
-                        break;
+                case TODO:
+                    handleTodo(fullCommand);
+                    break;
 
-                    case DEADLINE:
-                        handleDeadline(fullCommand);
-                        break;
+                case DEADLINE:
+                    handleDeadline(fullCommand);
+                    break;
 
-                    case EVENT:
-                        handleEvent(fullCommand);
-                        break;
+                case EVENT:
+                    handleEvent(fullCommand);
+                    break;
 
-                    case DATE:
-                        handleDate(fullCommand);
-                        break;
+                case DATE:
+                    handleDate(fullCommand);
+                    break;
 
-                    case FIND:
-                        handleFind(fullCommand);
-                        break;
+                case FIND:
+                    handleFind(fullCommand);
+                    break;
 
-                    default:
-                        throw new PrismException("!!! Unknown command.");
-                }
+                default:
+                    throw new PrismException("!!! Unknown command.");
+            }
         } catch (PrismException e) {
             this.ui.showError(e.getMessage());
         }
