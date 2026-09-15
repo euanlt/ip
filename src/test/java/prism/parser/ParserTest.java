@@ -56,8 +56,8 @@ public class ParserTest {
 
     @Test
     public void parseCommandType_unknownCommand_throwsException() {
-        PrismException exception = assertThrows(PrismException.class,
-                () -> Parser.parseCommandType("archive everything"));
+        PrismException exception = assertThrows(PrismException.class, () ->
+                Parser.parseCommandType("archive everything"));
         assertEquals("!!! I'm sorry, but I don't know what that means", exception.getMessage());
     }
 
@@ -68,8 +68,8 @@ public class ParserTest {
 
     @Test
     public void parseIndex_invalidInput_throwsHelpfulException() {
-        PrismException exception = assertThrows(PrismException.class,
-                () -> Parser.parseIndex("delete", "delete"));
+        PrismException exception = assertThrows(PrismException.class, () ->
+                Parser.parseIndex("delete", "delete"));
         assertEquals("!!! Please tell me which task number to delete, e.g. 'delete 2'.", exception.getMessage());
     }
 

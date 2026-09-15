@@ -4,17 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import prism.PrismException;
-import prism.task.Task;
-import prism.task.Todo;
 import prism.task.Deadline;
 import prism.task.Event;
+import prism.task.Task;
+import prism.task.Todo;
 
 public class TaskListTest {
     private TaskList taskList;
@@ -96,8 +96,8 @@ public class TaskListTest {
     @Test
     public void snoozeTodo_throwsException() {
         this.taskList.addTask(new Todo("read book"));
-        PrismException exception = assertThrows(PrismException.class,
-                () -> this.taskList.snoozeTask(0, "2025-12-02 1800"));
+        PrismException exception = assertThrows(PrismException.class, () ->
+                this.taskList.snoozeTask(0, "2025-12-02 1800"));
         assertEquals("!!! Only deadlines and events can be snoozed.", exception.getMessage());
     }
 }
