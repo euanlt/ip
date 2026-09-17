@@ -2,6 +2,8 @@
 
 Prism is a friendly task-management chatbot. Use the command box in the GUI to add, find, organize, and reschedule your tasks. Prism saves your task list automatically after changes.
 
+![Prism GUI](Ui.png)
+
 ## Quick start
 
 1. Start Prism using your IDE or the packaged application.
