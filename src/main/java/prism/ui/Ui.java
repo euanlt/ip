@@ -36,7 +36,8 @@ public class Ui {
     /** Displays the application logo and welcome message. */
     public void showWelcome() {
         showLine();
-        System.out.println(LOGO + "Hello! I'm Prism.\nWhat can I do for you?");
+        System.out.println(LOGO + "Hello! I'm Prism, your quietly enthusiastic task companion.\n"
+                + "Give me a command and we'll bring your day into focus.");
         showLine();
     }
 
@@ -62,7 +63,7 @@ public class Ui {
     /** Displays the exit message. */
     public void showBye() {
         showLine();
-        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println("Until next time—keep your day in focus!");
         showLine();
     }
 

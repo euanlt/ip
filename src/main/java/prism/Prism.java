@@ -112,10 +112,10 @@ public class Prism {
     /** Displays all tasks currently stored in the task list. */
     private void handleList() {
         if (this.tasks.getSize() == 0) {
-            this.ui.showMessage("Your task list is empty.");
+            this.ui.showMessage("Your task prism is clear—no tasks yet. Ready to add a new facet?");
             return;
         }
-        this.ui.showMessage("Here are the tasks in your list:\n");
+        this.ui.showMessage("Here is the current shape of your task prism:\n");
         for (int i = 0; i < this.tasks.getSize(); i++) {
             try {
                 this.ui.showMessage((i + 1) + "." + this.tasks.getTask(i));
@@ -130,7 +130,7 @@ public class Prism {
         int index = Parser.parseIndex(command, "mark");
         Task task = this.tasks.markTask(index);
         this.storage.save(this.tasks.getTasks());
-        this.ui.showMessage("Nice! I've marked this task as done:\n  " + task);
+        this.ui.showMessage("That facet is complete! I've marked this task as done:\n  " + task);
     }
 
     /** Marks the task selected by the command as not done and persists the change. */
@@ -138,7 +138,7 @@ public class Prism {
         int index = Parser.parseIndex(command, "unmark");
         Task task = this.tasks.unmarkTask(index);
         this.storage.save(this.tasks.getTasks());
-        this.ui.showMessage("OK, I've marked this task as not done yet:\n  " + task);
+        this.ui.showMessage("No problem—I've returned this facet to your active list:\n  " + task);
     }
 
     /** Deletes the task selected by the command and persists the change. */
@@ -146,7 +146,7 @@ public class Prism {
         int index = Parser.parseIndex(command, "delete");
         Task removed = this.tasks.deleteTask(index);
         this.storage.save(this.tasks.getTasks());
-        this.ui.showMessage("Noted. I've removed this task:\n"
+        this.ui.showMessage("Consider it refracted away. I've removed this task:\n"
                 + "  " + removed + "\n"
                 + "Now you have " + this.tasks.getSize() + " tasks in the list.");
     }
@@ -182,10 +182,10 @@ public class Prism {
         LocalDate queryDate = Parser.parseQueryDate(command);
         List<Task> matchingTasks = this.tasks.getTasksOnDate(queryDate);
 
-        this.ui.showMessage("Here are the tasks occurring on "
+        this.ui.showMessage("Here are the task facets appearing on "
                 + queryDate.format(DISPLAY_DATE_FORMATTER) + ":\n");
         if (matchingTasks.isEmpty()) {
-            this.ui.showMessage("  No matching tasks found.");
+            this.ui.showMessage("  No matching facets found—your schedule is clear.");
             return;
         }
         for (Task task : matchingTasks) {
@@ -198,9 +198,9 @@ public class Prism {
         String keyword = Parser.parseFindKeyword(command);
         List<Task> matchingTasks = this.tasks.findTasks(keyword);
 
-        this.ui.showMessage("Here are the matching tasks in your list:\n");
+        this.ui.showMessage("I found these matching facets in your prism:\n");
         if (matchingTasks.isEmpty()) {
-            this.ui.showMessage("  No matching tasks found.");
+            this.ui.showMessage("  No matching facets found. Try a different keyword?");
             return;
         }
         for (int i = 0; i < matchingTasks.size(); i++) {
@@ -214,12 +214,13 @@ public class Prism {
         int index = Parser.parseIndex("snooze " + args[0], "snooze");
         Task task = this.tasks.snoozeTask(index, args[1]);
         this.storage.save(this.tasks.getTasks());
-        this.ui.showMessage("Got it. I've snoozed this task to " + args[1] + ":\n  " + task);
+        this.ui.showMessage("The schedule has shifted beautifully. I've snoozed this task to "
+                + args[1] + ":\n  " + task);
     }
 
     /** Displays the standard confirmation message for a newly added task. */
     private void showAddedTaskMessage(Task task) {
-        this.ui.showMessage("Got it. I've added this task:\n"
+        this.ui.showMessage("A new facet has joined your prism:\n"
                 + "  " + task + "\n"
                 + "Now you have " + this.tasks.getSize() + " tasks in the list.");
     }
