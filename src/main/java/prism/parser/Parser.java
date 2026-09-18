@@ -3,13 +3,15 @@ package prism.parser;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 import prism.PrismException;
 
 /** Parses user commands and their task or date arguments. */
 public class Parser {
     private static final DateTimeFormatter DATE_INPUT_FORMATTER =
-            DateTimeFormatter.ofPattern("[d/M/yyyy][yyyy-MM-dd]");
+            DateTimeFormatter.ofPattern("[d/M/uuuu][uuuu-MM-dd]")
+                    .withResolverStyle(ResolverStyle.STRICT);
 
     /** Identifies the commands understood by the application. */
     public enum CommandType {
@@ -142,7 +144,8 @@ public class Parser {
         try {
             return LocalDate.parse(command.substring(4).trim(), DATE_INPUT_FORMATTER);
         } catch (DateTimeParseException e) {
-            throw new PrismException("!!! Invalid date format.");
+            throw new PrismException("!!! That is not a valid calendar date. Please use yyyy-MM-dd, "
+                    + "such as '2025-12-02'.");
         }
     }
 }

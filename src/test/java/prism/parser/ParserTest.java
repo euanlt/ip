@@ -92,6 +92,16 @@ public class ParserTest {
 
     @Test
     public void parseQueryDate_invalidDate_throwsException() {
+        PrismException exception = assertThrows(PrismException.class, () ->
+                Parser.parseQueryDate("date 2025-02-30"));
+        assertEquals("!!! That is not a valid calendar date. Please use yyyy-MM-dd, "
+                + "such as '2025-12-02'.", exception.getMessage());
         assertThrows(PrismException.class, () -> Parser.parseQueryDate("date 2025-99-99"));
+        assertThrows(PrismException.class, () -> Parser.parseQueryDate("date 31/04/2025"));
+    }
+
+    @Test
+    public void parseQueryDate_validLeapDay_returnsDate() throws PrismException {
+        assertEquals("2024-02-29", Parser.parseQueryDate("date 2024-02-29").toString());
     }
 }

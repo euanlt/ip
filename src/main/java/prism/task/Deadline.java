@@ -3,13 +3,15 @@ package prism.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 import prism.PrismException;
 
 /** Represents a task that must be completed by a specified date and time. */
 public class Deadline extends Task {
     private static final DateTimeFormatter INPUT_FORMATTER =
-            DateTimeFormatter.ofPattern("[d/M/yyyy HHmm][yyyy-MM-dd HHmm]");
+            DateTimeFormatter.ofPattern("[d/M/uuuu HHmm][uuuu-MM-dd HHmm]")
+                    .withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter OUTPUT_FORMATTER =
             DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
     private static final DateTimeFormatter FILE_FORMATTER =
@@ -33,7 +35,8 @@ public class Deadline extends Task {
             return LocalDateTime.parse(trimmedText, INPUT_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new PrismException(
-                    "!!! Invalid date format. Please use 'd/M/yyyy HHmm' or 'yyyy-MM-dd HHmm'.");
+                    "!!! That is not a valid date or time. Please use 'd/M/yyyy HHmm' or "
+                            + "'yyyy-MM-dd HHmm'.");
         }
     }
 

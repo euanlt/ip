@@ -40,6 +40,7 @@ public class TaskTest {
     @Test
     public void deadline_invalidDate_throwsException() {
         assertThrows(PrismException.class, () -> new Deadline("task", "not a date"));
+        assertThrows(PrismException.class, () -> new Deadline("task", "2025-02-30 1800"));
     }
 
     @Test
@@ -54,5 +55,13 @@ public class TaskTest {
     @Test
     public void event_invalidDate_throwsException() {
         assertThrows(PrismException.class, () -> new Event("meeting", "2025-12-02 0900", "bad"));
+        assertThrows(PrismException.class, () -> new Event("meeting", "31/04/2025 0900",
+                "2025-04-30 1030"));
+    }
+
+    @Test
+    public void event_validLeapDay_returnsEvent() throws PrismException {
+        Event event = new Event("meeting", "2024-02-29 0900", "2024-02-29 1030");
+        assertEquals(LocalDateTime.of(2024, 2, 29, 9, 0), event.getFrom());
     }
 }
